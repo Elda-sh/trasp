@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Station: {{station}} - {% endblock %}
+
+{% block content %}
+<div class="row">
+
+  <h1>Station: {{station}}</h1>
+
+  <div class="col-md-8">
+      <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Train</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+    {% for point in trains %}
+            <tr>
+              <th scope="row">{{forloop.counter}}</th>
+              <td>{{point.train}}</td>
+              <td>{{point.time}}</td>
+            </tr>
+    {% empty %}
+            <tr>
+              <th scope="row">&#8734;</th>
+              <td>No trains here</td>
+              <td></td>
+            </tr>
+    {% endfor %}
+          </tbody>
+        </table>
+  </div>
+
+</div>
+
+{% endblock %}

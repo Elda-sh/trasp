@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Train: {{train}} - {% endblock %}
+
+{% block content %}
+<div class="row">
+
+  <h1>Train: {{train}}</h1>
+
+  <div class="col-md-8">
+      <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Station</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+    {% for point in path %}
+            <tr>
+              <th scope="row">{{forloop.counter}}</th>
+              <td>{{point.station}}</td>
+              <td>{{point.time}}</td>
+            </tr>
+    {% endfor %}
+          </tbody>
+        </table>
+  </div>
+
+</div>
+
+{% endblock %}
