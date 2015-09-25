@@ -32,7 +32,7 @@
     {% for tr in trains %}
     <li><a href="{% url 'train' tr.id %}">{{tr}}</a></li>
     {% empty %}
-    <li>There is not any station.</li>
+    <li>There is not any train.</li>
     {% endfor %}
     </ul>
   </div>

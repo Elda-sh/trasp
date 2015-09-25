@@ -20,7 +20,7 @@
     {% for point in path %}
             <tr>
               <th scope="row">{{forloop.counter}}</th>
-              <td>{{point.station}}</td>
+              <td><a href="{% url 'station' point.station.id %}">{{point.station}}</a></td>
               <td>{{point.time}}</td>
             </tr>
     {% endfor %}

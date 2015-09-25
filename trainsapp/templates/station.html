@@ -20,7 +20,7 @@
     {% for point in trains %}
             <tr>
               <th scope="row">{{forloop.counter}}</th>
-              <td>{{point.train}}</td>
+              <td><a href="{% url 'train' point.train.id %}">{{point.train}}</a></td>
               <td>{{point.time}}</td>
             </tr>
     {% empty %}
