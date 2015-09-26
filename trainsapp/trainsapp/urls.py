@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
 from schedule import views
 
 urlpatterns = [
@@ -24,6 +25,8 @@ urlpatterns = [
         name='station'),
     url(r'^train/(?P<train_id>[0-9]+)$', views.view_train,
         name='train'),
+    url(r'^about$', TemplateView.as_view(template_name="about.html"),
+        name='about'),
 
     url(r'^api/get_cities/', views.get_cities, name='get_cities')
 ]
