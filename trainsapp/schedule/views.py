@@ -5,7 +5,7 @@ from schedule.models import City, Train, Station, TrainPath
 
 
 def home(request):
-    stations = Station.objects.all()
+    cities = City.objects.all()
     trains = Train.objects.all()
 
     is_search = False

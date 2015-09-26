@@ -77,10 +77,23 @@
   <div class="col-md-6">
     <h2>Stations:</h2>
     <ul>
-    {% for st in stations %}
-    <li><a href="{% url 'station' st.id %}">{{st}}</a></li>
+    {% for c in cities %}
+    {% if c.station_set.all|length > 1 %}
+      <li>
+      <i>{{c.name}}</i>
+      <ul>
+      {% for st in c.station_set.all %}
+        <li><a href="{% url 'station' st.id %}">{{st.name}}</a></li>
+      {% endfor %}
+      </ul>
+      </li>
+    {% else %}
+      {% for st in c.station_set.all %}
+      <li><a href="{% url 'station' st.id %}">{{c.name}} / {{st.name}}</a></li>
+      {% endfor %}
+    {% endif %}
     {% empty %}
-    <li>There is not any station.</li>
+      <li>There is not any cities.</li>
     {% endfor %}
     </ul>
   </div>
