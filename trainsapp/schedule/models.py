@@ -46,7 +46,9 @@ class Train(models.Model):
         return train
 
     def __unicode__(self):
-        return "#{num} {name}".format(num=self.number, name=self.name)
+        return "#{num} {name}, {fr} - {to}".format(
+            num=self.number, name=self.name,
+            fr=self.from_city, to=self.to_city)
 
     @classmethod
     def search_raw(cls, from_city, to_city, train_date):
@@ -55,7 +57,8 @@ class Train(models.Model):
 
         if train_date:
             return Train.objects.raw(
-                """SELECT tp1.train_id as id FROM
+                """SELECT tp1.train_id as id,
+                TIMESTAMPDIFF(HOUR, tp1.time, tp2.time) as traveltime FROM
                       (SELECT train_id, city_id, time
                        FROM schedule_trainpath tp
                         INNER JOIN schedule_station st
@@ -75,7 +78,8 @@ class Train(models.Model):
                       train_date+timezone.timedelta(days=1)])
         else:
             return Train.objects.raw(
-                """SELECT tp1.train_id as id FROM
+                """SELECT tp1.train_id as id,
+                TIMESTAMPDIFF(HOUR, tp1.time, tp2.time) as traveltime FROM
                       (SELECT train_id, city_id, time
                        FROM schedule_trainpath tp
                         INNER JOIN schedule_station st

@@ -24,8 +24,8 @@ def create_cities(cities_num):
 
 
 def create_stations():
-    stations_names = ["Main", "Central", "South Sation", "North Sation",
-                      "East Sation", "West Sation"]
+    stations_names = ["Main Station", "Central Station", "South Station",
+                      "North Station", "East Station", "West Station"]
     for c in City.objects.all():
         snum = 1
         if random.random() > 0.9:

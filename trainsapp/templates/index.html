@@ -35,23 +35,20 @@
         <tr>
           <th>#</th>
           <th>Train</th>
-          <th>From</th>
-          <th>To</th>
+          <th>Time from {{from_city}} to {{to_city}}</th>
         </tr>
       </thead>
       <tbody>
       {% for tr in searched_trains %}
       <tr>
         <th scope="row">{{forloop.counter}}</th>
-        <td><a href="{% url 'train' tr.id %}">{{tr}}</a></a></td>
-        <td>{{tr.from_city}}</td>
-        <td>{{tr.to_city}}</td>
+        <td><a href="{% url 'train' tr.id %}">{{tr}}</a>, {{tr.from_city}} - {{tr.to_city}}</td>
+        <td>{{tr.traveltime}} hours</td>
       </tr>
       {% empty %}
       <tr>
         <th scope="row">&#8734;</th>
         <td>No trains found</td>
-        <td></td>
         <td></td>
       </tr>
       {% endfor %}
