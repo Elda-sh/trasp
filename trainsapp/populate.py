@@ -37,17 +37,25 @@ def create_stations():
 
 
 def create_trains(num_trains):
-    num_stations = Station.objects.all().count()
+    num_cities = City.objects.all().count()
     for i in xrange(num_trains):
         number = "{}{}".format(random.randint(1, 10000),
                                random.choice(string.ascii_letters))
         name = fake.military_ship()
 
+        cities = []
+        for i in xrange(random.randint(2, num_cities)):
+            city = City.objects.all()[random.randint(0, num_cities-1)]
+            if city not in cities:
+                cities.append(city)
+
+        if len(cities) < 2:
+            continue
+
         stns = []
-        for i in xrange(random.randint(2, num_stations/2)):
-            station = Station.objects.all()[random.randint(0, num_stations-1)]
-            if station not in stns:
-                stns.append(station)
+        for c in cities:
+            num_st = c.station_set.all().count()
+            stns.append(c.station_set.all()[random.randint(0, num_st-1)])
 
         stns_time = [timezone2.now() +
                      timedelta(hours=random.randint(1, 4)), ]

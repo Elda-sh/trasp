@@ -22,9 +22,14 @@ class Train(models.Model):
     number = models.CharField(max_length=10)
     name = models.CharField(max_length=200)
 
+    from_city = models.ForeignKey('City', related_name='from_city')
+    to_city = models.ForeignKey('City', related_name='to_city')
+
     @classmethod
     def create(cls, number, name, timeandstations):
-        train = cls(number=number, name=name)
+        train = cls(number=number, name=name,
+                    from_city=timeandstations[0][1].city,
+                    to_city=timeandstations[-1][1].city)
         train.save()
         for time, station in sorted(timeandstations):
             TrainPath.objects.create(
