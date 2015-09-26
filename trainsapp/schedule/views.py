@@ -1,3 +1,5 @@
+import json
+from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.utils import dateparse
 
@@ -34,3 +36,15 @@ def view_train(request, train_id):
     train = get_object_or_404(Train, pk=train_id)
     path = TrainPath.objects.filter(train=train)
     return render_to_response('train.html', locals())
+
+
+def get_cities(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        cities = City.objects.filter(name__icontains=q)[:20]
+        results = [c.name for c in cities]
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

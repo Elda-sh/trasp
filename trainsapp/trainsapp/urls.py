@@ -24,4 +24,6 @@ urlpatterns = [
         name='station'),
     url(r'^train/(?P<train_id>[0-9]+)$', views.view_train,
         name='train'),
+
+    url(r'^api/get_cities/', views.get_cities, name='get_cities')
 ]
