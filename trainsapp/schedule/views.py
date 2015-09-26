@@ -7,9 +7,6 @@ from schedule.models import City, Train, Station, TrainPath
 
 
 def home(request):
-    cities = City.objects.all()
-    trains = Train.objects.all()
-
     is_search = False
     from_city = request.GET.get('from_city')
     to_city = request.GET.get('to_city')
@@ -22,6 +19,10 @@ def home(request):
         except City.DoesNotExist:
             train_count = 0
             zero_results = "Nothing found"
+
+    if not is_search:
+        cities = City.objects.all()
+        trains = Train.objects.all()
 
     return render_to_response('index.html', locals())
 

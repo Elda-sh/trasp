@@ -42,7 +42,7 @@
       {% for tr in searched_trains %}
       <tr>
         <th scope="row">{{forloop.counter}}</th>
-        <td><a href="{% url 'train' tr.id %}">{{tr}}</a>, {{tr.from_city}} - {{tr.to_city}}</td>
+        <td><a href="{% url 'train' tr.id %}">{{tr}}</a></td>
         <td>{{tr.traveltime}} hours</td>
       </tr>
       {% empty %}
@@ -58,6 +58,7 @@
 </div>
 {% endif %}
 
+{% if not is_search %}
 <div class="row">
 
   <div class="col-md-6">
@@ -96,6 +97,7 @@
   </div>
 
 </div>
+{% endif %}
 {% endblock %}
 
 
