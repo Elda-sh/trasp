@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Q, Count
+from django.utils import timezone
 
 
 class City(models.Model):
@@ -38,6 +40,44 @@ class Train(models.Model):
 
     def __unicode__(self):
         return "#{num} {name}".format(num=self.number, name=self.name)
+
+    @classmethod
+    def search_raw(cls, from_city, to_city, train_date):
+        c1 = City.objects.get(name=from_city)
+        c2 = City.objects.get(name=to_city)
+
+        if train_date:
+            return Train.objects.raw(
+                """SELECT tp1.train_id as id FROM
+                      (SELECT train_id, city_id, time
+                       FROM schedule_trainpath tp
+                        INNER JOIN schedule_station st
+                        ON tp.station_id=st.id) tp1
+                      INNER JOIN
+                      (SELECT train_id, city_id, time FROM schedule_trainpath tp
+                        INNER JOIN schedule_station st
+                        ON tp.station_id=st.id) tp2
+                    ON tp1.train_id=tp2.train_id
+                    AND tp1.city_id=%s AND tp2.city_id=%s
+                    AND tp1.time < tp2.time
+                    AND DATE(tp1.time) >= %s
+                    AND DATE(tp1.time) < %s;
+                """, [c1.id, c2.id,
+                      train_date,
+                      train_date+timezone.timedelta(days=1)])
+        else:
+            return Train.objects.raw(
+                """SELECT tp1.train_id as id FROM
+                      (SELECT train_id, city_id, time FROM schedule_trainpath tp
+                        INNER JOIN schedule_station st ON tp.station_id=st.id) tp1
+                      INNER JOIN
+                      (SELECT train_id, city_id, time FROM schedule_trainpath tp
+                        INNER JOIN schedule_station st ON tp.station_id=st.id) tp2
+                    ON tp1.train_id=tp2.train_id
+                    AND tp1.city_id=%s
+                    AND tp2.city_id=%s
+                    AND tp1.time < tp2.time;
+                """, [c1.id, c2.id])
 
 
 class TrainPath(models.Model):
