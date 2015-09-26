@@ -1,11 +1,12 @@
 from django.db import models
-from django.db.models import Q, Count
 from django.utils import timezone
 
 
 class City(models.Model):
     class Meta:
         verbose_name_plural = "cities"
+        ordering = ['name']
+
     name = models.CharField(max_length=200)
 
     def __unicode__(self):
@@ -13,6 +14,9 @@ class City(models.Model):
 
 
 class Station(models.Model):
+    class Meta:
+        ordering = ['name']
+
     name = models.CharField(max_length=200)
     city = models.ForeignKey('City')
 
@@ -21,6 +25,9 @@ class Station(models.Model):
 
 
 class Train(models.Model):
+    class Meta:
+        ordering = ['number']
+
     number = models.CharField(max_length=10)
     name = models.CharField(max_length=200)
 
@@ -54,7 +61,8 @@ class Train(models.Model):
                         INNER JOIN schedule_station st
                         ON tp.station_id=st.id) tp1
                       INNER JOIN
-                      (SELECT train_id, city_id, time FROM schedule_trainpath tp
+                      (SELECT train_id, city_id, time
+                       FROM schedule_trainpath tp
                         INNER JOIN schedule_station st
                         ON tp.station_id=st.id) tp2
                     ON tp1.train_id=tp2.train_id
@@ -68,11 +76,15 @@ class Train(models.Model):
         else:
             return Train.objects.raw(
                 """SELECT tp1.train_id as id FROM
-                      (SELECT train_id, city_id, time FROM schedule_trainpath tp
-                        INNER JOIN schedule_station st ON tp.station_id=st.id) tp1
+                      (SELECT train_id, city_id, time
+                       FROM schedule_trainpath tp
+                        INNER JOIN schedule_station st
+                        ON tp.station_id=st.id) tp1
                       INNER JOIN
-                      (SELECT train_id, city_id, time FROM schedule_trainpath tp
-                        INNER JOIN schedule_station st ON tp.station_id=st.id) tp2
+                      (SELECT train_id, city_id, time
+                       FROM schedule_trainpath tp
+                        INNER JOIN schedule_station st
+                        ON tp.station_id=st.id) tp2
                     ON tp1.train_id=tp2.train_id
                     AND tp1.city_id=%s
                     AND tp2.city_id=%s
@@ -81,6 +93,9 @@ class Train(models.Model):
 
 
 class TrainPath(models.Model):
+    class Meta:
+        ordering = ['time']
+
     train = models.ForeignKey('Train')
     station = models.ForeignKey('Station')
     time = models.DateTimeField()
