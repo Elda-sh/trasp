@@ -3,37 +3,77 @@
 {% block title %}Station: {{station}} - {% endblock %}
 
 {% block content %}
+
 <div class="row">
+  <h1>{{station.city}}, {{station.name}} <small>List of trains</small></h1>
+<div class="col-md-12">
 
-  <h1>{{station.city}}, {{station.name}}</h1>
+  <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" class="active">
+      <a href="#calendar" aria-controls="calendar" role="tab" data-toggle="tab">Calendar</a>
+      </li>
+      <li role="presentation">
+      <a href="#table" aria-controls="table" role="tab" data-toggle="tab">Table</a>
+      </li>
+  </ul>
+  <br>
+  <div class="tab-content">
 
-  <div class="col-md-8">
-      <table class="table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Train</th>
-              <th>Time</th>
-            </tr>
-          </thead>
-          <tbody>
-    {% for point in trains %}
-            <tr>
-              <th scope="row">{{forloop.counter}}</th>
-              <td><a href="{% url 'train' point.train.id %}">{{point.train}}</a></td>
-              <td>{{point.time}}</td>
-            </tr>
-    {% empty %}
-            <tr>
-              <th scope="row">&#8734;</th>
-              <td>No trains here</td>
-              <td></td>
-            </tr>
-    {% endfor %}
-          </tbody>
-        </table>
+    <div role="tabpanel" class="tab-pane active" id="calendar">
+      <h4>{{ start|date:"F" }}</h4>
+      <table class="table table-condensed table-calendar">
+        <tbody>
+        {% for w in calendar %}
+          <tr>
+            {% for d in w %}
+              <td class="col-md-1">
+                <h6>{{ d.date|date:"d" }}</h6>
+                <ul>
+                {% for tp in d.events %}
+                  <li><a href="{% url 'train' tp.train.id %}">#{{tp.train.number}}</a></li>
+                {% endfor %}
+                </ul>
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="table">
+        <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Train</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+      {% for point in trains %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td><a href="{% url 'train' point.train.id %}">{{point.train}}</a></td>
+                <td>{{point.time}}</td>
+              </tr>
+      {% empty %}
+              <tr>
+                <th scope="row">&#8734;</th>
+                <td>No trains here</td>
+                <td></td>
+              </tr>
+      {% endfor %}
+            </tbody>
+          </table>
+    </div>
+
   </div>
 
+
 </div>
+</div>
+
+
 
 {% endblock %}

@@ -94,3 +94,7 @@ code {
     }
   }
 }
+
+.table-calendar tr {
+  height: 80px;
+}
