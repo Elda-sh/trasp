@@ -2,6 +2,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.utils import dateparse
+from django.utils import timezone
 
 from schedule.models import City, Train, Station, TrainPath
 
@@ -21,8 +22,10 @@ def home(request):
             zero_results = "Nothing found"
 
     if not is_search:
-        cities = City.objects.all()
-        trains = Train.objects.all()
+        cities = City.objects.all()[:50]
+        trains = Train.objects.filter(
+            departure_time__gte=timezone.now().date()
+            ).order_by('departure_time')[:50]
 
     return render_to_response('index.html', locals())
 

@@ -26,7 +26,7 @@ class Station(models.Model):
 
 class Train(models.Model):
     class Meta:
-        ordering = ['number']
+        ordering = ['departure_time']
 
     number = models.CharField(max_length=10)
     name = models.CharField(max_length=200)
@@ -34,11 +34,14 @@ class Train(models.Model):
     from_city = models.ForeignKey('City', related_name='from_city')
     to_city = models.ForeignKey('City', related_name='to_city')
 
+    departure_time = models.DateTimeField()
+
     @classmethod
     def create(cls, number, name, timeandstations):
         train = cls(number=number, name=name,
                     from_city=timeandstations[0][1].city,
-                    to_city=timeandstations[-1][1].city)
+                    to_city=timeandstations[-1][1].city,
+                    departure_time=timeandstations[0][0])
         train.save()
         for time, station in sorted(timeandstations):
             TrainPath.objects.create(
