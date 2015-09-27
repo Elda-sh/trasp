@@ -61,6 +61,8 @@ class Train(models.Model):
         if train_date:
             return Train.objects.raw(
                 """SELECT tp1.train_id as id,
+                tp1.time as st_dep_time,
+                tp2.time as st_arr_time,
                 TIMESTAMPDIFF(HOUR, tp1.time, tp2.time) as traveltime FROM
                       (SELECT train_id, city_id, time
                        FROM schedule_trainpath tp
@@ -75,13 +77,16 @@ class Train(models.Model):
                     AND tp1.city_id=%s AND tp2.city_id=%s
                     AND tp1.time < tp2.time
                     AND DATE(tp1.time) >= %s
-                    AND DATE(tp1.time) < %s;
+                    AND DATE(tp1.time) < %s
+                    ORDER BY st_dep_time;
                 """, [c1.id, c2.id,
                       train_date,
                       train_date+timezone.timedelta(days=1)])
         else:
             return Train.objects.raw(
                 """SELECT tp1.train_id as id,
+                tp1.time as st_dep_time,
+                tp2.time as st_arr_time,
                 TIMESTAMPDIFF(HOUR, tp1.time, tp2.time) as traveltime FROM
                       (SELECT train_id, city_id, time
                        FROM schedule_trainpath tp
@@ -95,7 +100,8 @@ class Train(models.Model):
                     ON tp1.train_id=tp2.train_id
                     AND tp1.city_id=%s
                     AND tp2.city_id=%s
-                    AND tp1.time < tp2.time;
+                    AND tp1.time < tp2.time
+                    ORDER BY st_dep_time;
                 """, [c1.id, c2.id])
 
 

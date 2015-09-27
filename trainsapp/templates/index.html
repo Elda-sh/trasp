@@ -28,15 +28,16 @@
 
 {% if is_search %}
 <div class="row">
-  <div class="col-md-10">
+  <div class="col-md-12">
     <h2>{{train_count}} trains from {{from_city}} to {{to_city}}{% if train_date %} on {{train_date}}{% endif %}:</h2>
     <table class="table">
       <thead>
         <tr>
           <th>#</th>
           <th>Train</th>
-          <th>Time from {{from_city}} to {{to_city}}</th>
+          <th>Travel Time</th>
           <th>Departing</th>
+          <th>Arriving</th>
         </tr>
       </thead>
       <tbody>
@@ -45,7 +46,8 @@
         <th scope="row">{{forloop.counter}}</th>
         <td><a href="{% url 'train' tr.id %}">{{tr}}</a></td>
         <td>{{tr.traveltime}} hours</td>
-        <td>{{tr.departure_time}}</td>
+        <td>{{tr.st_dep_time}}</td>
+        <td>{{tr.st_arr_time}}</td>
       </tr>
       {% empty %}
       <tr>
