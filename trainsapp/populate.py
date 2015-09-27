@@ -58,7 +58,7 @@ def create_trains(num_trains):
             stns.append(c.station_set.all()[random.randint(0, num_st-1)])
 
         stns_time = [timezone2.now() +
-                     timedelta(hours=random.randint(1, 4)), ]
+                     timedelta(hours=random.randint(-48, 48)), ]
         for s in stns[1:]:
             stns_time.append(stns_time[-1] +
                              timedelta(hours=random.randint(1, 4)))
