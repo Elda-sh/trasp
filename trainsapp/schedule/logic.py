@@ -49,10 +49,9 @@ def search_train(from_city, to_city, train_date):
                 tp1.train.traveltime = 24*td.days+td.seconds//3600
 
                 trains.append(tp1.train)
-        except TrainPath.DoesNotExist, e:
-            print("Exception in search: TrainPath.DoesNotExist:")
+        except IndexError:
+            print("Exception in search: TrainPath filter IndexError")
             print(from_city, to_city, train_date)
-            print(e)
             pass
 
     return sorted(trains, key=lambda tr: tr.st_dep_time)

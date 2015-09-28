@@ -2,8 +2,8 @@ from itertools import groupby
 import json
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
-from django.utils import dateparse
-from django.utils import timezone
+from django.db import OperationalError
+from django.utils import dateparse, timezone
 
 from schedule.models import City, Train, Station, TrainPath
 from schedule.logic import search_train
@@ -39,12 +39,17 @@ def home(request):
     train_date = dateparse.parse_date(request.GET.get('date', ''))
     if from_city and to_city:
         is_search = True
+        train_count = 0
         try:
             searched_trains = search_train(from_city, to_city, train_date)
             train_count = len(searched_trains)
-        except City.DoesNotExist:
-            train_count = 0
-            zero_results = "Nothing found"
+        except City.DoesNotExist, e:
+            error = str(e)
+        except OperationalError, e:
+            error = "DB error", e[0]
+            print("Exception: OperationalError")
+            print("DB not properly configured?")
+            print("search_train", from_city, to_city, train_date)
 
     if not is_search:
         cities = City.objects.all()[:50]
