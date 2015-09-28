@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.db.models import Q, Count
 
 from schedule.models import City, Train, TrainPath
 
@@ -13,6 +14,48 @@ def create_train(number, name, timeandstations):
         TrainPath.objects.create(
             train=train, station=station, time=time)
     return train
+
+
+def search_train(from_city, to_city, train_date):
+    c1 = City.objects.get(name=from_city)
+    c2 = City.objects.get(name=to_city)
+
+    if train_date:
+        TrainPathQ = TrainPath.objects.filter(
+            time__gte=train_date,
+            time__lte=train_date+timezone.timedelta(days=1))
+    else:
+        TrainPathQ = TrainPath.objects.all()
+
+    train_dict = TrainPathQ.filter(
+        Q(station__city=c1) | Q(station__city=c2)
+    ).values('train_id').annotate(
+        Count('id')
+    ).order_by().filter(id__count__gt=1)
+
+    trains = []
+    for x in train_dict:
+        try:
+            tp1 = TrainPath.objects.filter(
+                    train__pk=x['train_id']
+                ).filter(station__city=c1)[0]
+            tp2 = TrainPath.objects.filter(
+                    train__pk=x['train_id']
+                ).filter(station__city=c2)[0]
+            if tp1.time < tp2.time:
+                tp1.train.st_dep_time = tp1.time
+                tp1.train.st_arr_time = tp2.time
+                td = (tp2.time-tp1.time)
+                tp1.train.traveltime = 24*td.days+td.seconds//3600
+
+                trains.append(tp1.train)
+        except TrainPath.DoesNotExist, e:
+            print("Exception in search: TrainPath.DoesNotExist:")
+            print(from_city, to_city, train_date)
+            print(e)
+            pass
+
+    return sorted(trains, key=lambda tr: tr.st_dep_time)
 
 
 def search_train_raw(from_city, to_city, train_date):

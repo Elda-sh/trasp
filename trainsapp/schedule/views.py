@@ -6,7 +6,7 @@ from django.utils import dateparse
 from django.utils import timezone
 
 from schedule.models import City, Train, Station, TrainPath
-from schedule.logic import search_train_raw
+from schedule.logic import search_train
 
 
 def create_calendar(start, now, events, days):
@@ -40,8 +40,8 @@ def home(request):
     if from_city and to_city:
         is_search = True
         try:
-            searched_trains = search_train_raw(from_city, to_city, train_date)
-            train_count = len(list(searched_trains))
+            searched_trains = search_train(from_city, to_city, train_date)
+            train_count = len(searched_trains)
         except City.DoesNotExist:
             train_count = 0
             zero_results = "Nothing found"
