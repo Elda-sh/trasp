@@ -11,14 +11,10 @@ Usage
 
 Install python dependencies (you can use virtalenv)
 
-.. code-block:: bash
-
     $ pip install -r requirements.txt
 
 
 Set up necessary environment variables:
-
-.. code-block:: bash
 
     $ # Django secret key
     $ export SECRET_KEY='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
@@ -31,15 +27,11 @@ Set up necessary environment variables:
 
 Now you need to initialize DB:
 
-.. code-block:: bash
-
     $ python trainsapp/manage.py makemigrations
     $ python trainsapp/manage.py migrate
 
 
 You can fill database by hand or use random data generator:
-
-.. code-block:: bash
 
     $ python trainsapp/manage.py shell
     >>> from populate import run
@@ -47,7 +39,5 @@ You can fill database by hand or use random data generator:
 
 
 Run development server at http://localhost:8000 :
-
-.. code-block:: bash
 
     $ python trainsapp/manage.py runserver
