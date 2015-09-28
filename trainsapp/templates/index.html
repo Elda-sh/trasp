@@ -44,7 +44,7 @@
       {% for tr in searched_trains %}
       <tr>
         <th scope="row">{{forloop.counter}}</th>
-        <td><a href="{% url 'train' tr.id %}">{{tr}}</a></td>
+        <td><a href="{% url 'train' tr.id %}?from_city={{from_city}}&to_city={{to_city}}">{{tr}}</a></td>
         <td>{{tr.traveltime}} hours</td>
         <td>{{tr.st_dep_time}}</td>
         <td>{{tr.st_arr_time}}</td>

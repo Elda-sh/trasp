@@ -18,7 +18,8 @@
           </thead>
           <tbody>
     {% for point in path %}
-            <tr>
+            <tr {% if to_city == point.station.city.name %} class="success"{% endif %}
+                {% if from_city == point.station.city.name %} class="info"{% endif %}>
               <th scope="row">{{forloop.counter}}</th>
               <td><a href="{% url 'station' point.station.id %}">{{point.station}}</a></td>
               <td>{{point.time}}</td>

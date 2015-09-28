@@ -77,6 +77,8 @@ def view_station(request, station_id):
 
 
 def view_train(request, train_id):
+    from_city = request.GET.get('from_city')
+    to_city = request.GET.get('to_city')
     train = get_object_or_404(Train, pk=train_id)
     path = TrainPath.objects.filter(train=train)
     return render_to_response('train.html', locals())
