@@ -9,6 +9,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from schedule.models import City, Station, Train, TrainPath
+from schedule.logic import create_train
 fake = Faker()
 
 
@@ -63,7 +64,7 @@ def create_trains(num_trains):
             stns_time.append(stns_time[-1] +
                              timedelta(hours=random.randint(1, 4)))
 
-        Train.create(number, name, zip(stns_time, stns))
+        create_train(number, name, zip(stns_time, stns))
 
 
 def run(num_cities=10, num_trains=4):
