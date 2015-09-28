@@ -1,22 +1,13 @@
 #!/usr/bin/env python
-from datetime import datetime
 import string
 import random
 from faker import Faker
-from pytz import timezone
 from django.utils import timezone as timezone2
 from datetime import timedelta
 
-from django.conf import settings
 from schedule.models import City, Station, Train, TrainPath
 from schedule.logic import create_train
 fake = Faker()
-
-
-def random_date(now_plus=28):
-    current_tz = timezone(settings.TIME_ZONE)
-    fake_date = fake.date_time_between(datetime.now(), now_plus)
-    return current_tz.localize(fake_date)
 
 
 def create_cities(cities_num):

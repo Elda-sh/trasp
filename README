@@ -1,1 +1,53 @@
 Simple Django application for Train Timetable
+=========================
+
+Application implements basic functional of timetables: search trains between cities,
+look for trains at station, displays train's path.
+
+Database is MySql.
+
+Usage
+------------
+
+Install python dependencies (you can use virtalenv)
+
+.. code-block:: bash
+
+    $ pip install -r requirements.txt
+
+
+Set up necessary environment variables:
+
+.. code-block:: bash
+
+    $ # Django secret key
+    $ export SECRET_KEY='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    $ # MySql settings
+    $ export DB_ENV_MYSQL_DATABASE=db_name
+    $ export DB_ENV_MYSQL_USER=user_name
+    $ export DB_ENV_MYSQL_PASSWORD=user_password
+    $ export DB_PORT_3306_TCP_ADDR=127.0.0.1
+
+
+Now you need to initialize DB:
+
+.. code-block:: bash
+
+    $ python trainsapp/manage.py makemigrations
+    $ python trainsapp/manage.py migrate
+
+
+You can fill database by hand or use random data generator:
+
+.. code-block:: bash
+
+    $ python trainsapp/manage.py shell
+    >>> from populate import run
+    >>> run(num_cities=20, num_trains=121)
+
+
+Run development server at http://localhost:8000 :
+
+.. code-block:: bash
+
+    $ python trainsapp/manage.py runserver
