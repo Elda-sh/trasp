@@ -10,6 +10,19 @@ from schedule.logic import search_train
 
 
 def create_calendar(start, now, events, days):
+    """ Groups events by date
+
+    Args:
+        start (Date object): Start date
+        now (str): Current date
+        events (list): List of events grouped by date
+        days (list): List of days
+
+    Returns:
+        list: List of weeks, each week is a list of days. Day is dict.
+
+    """
+
     calendar = []
 
     for j in xrange(4):
@@ -33,6 +46,13 @@ def create_calendar(start, now, events, days):
 
 
 def home(request):
+    """ Home page view
+
+        Displays departing trains and stations.
+        If there is get parameters from_city, to_city (optional date)
+        would show search results instead.
+
+    """
     is_search = False
     from_city = request.GET.get('from_city')
     to_city = request.GET.get('to_city')
@@ -61,6 +81,11 @@ def home(request):
 
 
 def view_station(request, station_id):
+    """ Station view
+
+        Displays list of trains on station with id=`station_id`
+
+    """
     now = timezone.localtime(timezone.now())
     start = now.date() - timezone.timedelta(days=now.weekday())
 
@@ -82,6 +107,11 @@ def view_station(request, station_id):
 
 
 def view_train(request, train_id):
+    """ Train view
+
+        Displays train path by `train_id`
+
+    """
     from_city = request.GET.get('from_city')
     to_city = request.GET.get('to_city')
     train = get_object_or_404(Train, pk=train_id)
@@ -90,6 +120,8 @@ def view_train(request, train_id):
 
 
 def get_cities(request):
+    """ API for auto-completion of cities names"""
+
     if request.is_ajax():
         q = request.GET.get('term', '')
         cities = City.objects.filter(name__icontains=q)[:20]

@@ -5,6 +5,17 @@ from schedule.models import City, Train, TrainPath
 
 
 def create_train(number, name, timeandstations):
+    """ Creates a new train object
+
+    Args:
+        number (str): Train number
+        name (str): Train name
+        timeandstations (list of tuples): List of time and Station object
+
+    Returns:
+        models.Train: Train object
+
+    """
     train = Train(number=number, name=name,
                   from_city=timeandstations[0][1].city,
                   to_city=timeandstations[-1][1].city,
@@ -17,6 +28,19 @@ def create_train(number, name, timeandstations):
 
 
 def search_train(from_city, to_city, train_date):
+    """ Looking for trains which has from City to City
+
+        If date is None returns all trains
+
+    Args:
+        from_city (str): City name start point
+        to_city (str): City name to_city
+        train_date (date object): Departure date, could be None
+
+    Returns:
+        list: List of train objects
+
+    """
     c1 = City.objects.get(name=from_city)
     c2 = City.objects.get(name=to_city)
 
@@ -58,6 +82,20 @@ def search_train(from_city, to_city, train_date):
 
 
 def search_train_raw(from_city, to_city, train_date):
+    """ Looking for trains which has from City to City
+
+        The same as search_train, but different realisation.
+        If date is None returns all trains
+
+    Args:
+        from_city (str): City name start point
+        to_city (str): City name to_city
+        train_date (date object): Departure date, could be None
+
+    Returns:
+        list: List of train objects
+
+    """
     c1 = City.objects.get(name=from_city)
     c2 = City.objects.get(name=to_city)
 
